@@ -1,64 +1,81 @@
-TITLE by YOUR_NAME_HERE
+White Wine Quality Analysis by Arvind Raj
 ========================================================
 
-> **Tip**: You will see quoted sections like this throughout the template to
-help you construct your report. Make sure that you remove these notes before
-you finish and submit your project!
-
-> **Tip**: One of the requirements of this project is that your code follows
-good formatting techniques, including limiting your lines to 80 characters or
-less. If you're using RStudio, go into Preferences \> Code \> Display to set up
-a margin line to help you keep track of this guideline!
-
 ```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
-# Load all of the packages that you end up using in your analysis in this code
-# chunk.
-
-# Notice that the parameter "echo" was set to FALSE for this code chunk. This
-# prevents the code from displaying in the knitted HTML output. You should set
-# echo=FALSE for all code chunks in your file, unless it makes sense for your
-# report to show the code that generated a particular plot.
-
-# The other parameters for "message" and "warning" should also be set to FALSE
-# for other code chunks once you have verified that each plot comes out as you
-# want it to. This will clean up the flow of your report.
+setwd("D:/Studies/Git/White-wine-Quality")
 
 library(ggplot2)
+library(knitr)
+library(gridExtra)
+library(GGally)
 ```
 
 ```{r echo=FALSE, Load_the_Data}
 # Load the Data
-
+wwine <- read.csv('wineQualityWhites.csv')
 ```
 
-> **Tip**: Before you create any plots, it is a good idea to provide a short
-introduction into the dataset that you are planning to explore. Replace this
-quoted text with that general information!
+This report explores the quality of 4898 different red wwines. This particular dataset consists of 4898 observations with 13 different variables.
+
+#Summary of Dataset
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, summary_1}
+dim(wwine)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, summary_2}
+str(wwine)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, summary_3}
+summary(wwine)
+```
 
 # Univariate Plots Section
 
-> **Tip**: In this section, you should perform some preliminary exploration of
-your dataset. Run some summaries of the data and create univariate plots to
-understand the structure of the individual variables in your dataset. Don't
-forget to add a comment after each plot or closely-related group of plots!
-There should be multiple code chunks and text sections; the first one below is
-just to help you get started.
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+p1 = ggplot(aes(x = fixed.acidity), data = wwine) +
+  geom_histogram()
+p2 = ggplot(aes(x = volatile.acidity), data = wwine) +
+  geom_histogram()
+p3 = ggplot(aes(x = citric.acid), data = wwine) +
+  geom_histogram()
+p4 = ggplot(aes(x = residual.sugar), data = wwine) +
+  geom_histogram()
+p5 = ggplot(aes(x = chlorides), data = wwine) +
+  geom_histogram()
+p6 = ggplot(aes(x = free.sulfur.dioxide), data = wwine) +
+  geom_histogram()
+p7 = ggplot(aes(x = total.sulfur.dioxide), data = wwine) +
+  geom_histogram()
+p8 = ggplot(aes(x = density ), data = wwine) +
+  geom_histogram()
+p12 = ggplot(aes(x = pH), data = wwine) +
+  geom_histogram()
+p9 = ggplot(aes(x = sulphates), data = wwine) +
+  geom_histogram()
+p10 = ggplot(aes(x = alcohol), data = wwine) +
+  geom_histogram()
+p11 = ggplot(aes(x = quality), data = wwine) +
+  geom_bar()
 
-```{r echo=FALSE, Univariate_Plots}
-
+grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p12, p9, p10, p11, ncol = 3)
 ```
 
-> **Tip**: Make sure that you leave a blank line between the start / end of
-each code block and the end / start of your Markdown text so that it is
-formatted nicely in the knitted text. Note as well that text on consecutive
-lines is treated as a single space. Make sure you have a blank line between
-your paragraphs so that they too are formatted for easy readability.
+The one thing we observed in almost all the above plots are the obscene outliers. For further exploration we would have to remove these outliers. We have cut off the top 1% of data to remove such outliers. The outliers must be cut off from the following variables (fixed acidity, volatile acidity, citric acid, residual sugar, chlorides, free sulfur dioxide, total sulphur dioxide and sulphates.)
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Remove_outliers}
+wwine <- wwine[wwine$fixed.acidity < quantile(wwine$fixed.acidity, 0.99),]
+wwine <- wwine[wwine$volatile.acidity < quantile(wwine$volatile.acidity, 0.99),]
+wwine <- wwine[wwine$citric.acid < quantile(wwine$citric.acid, 0.99),]
+wwine <- wwine[wwine$residual.sugar < quantile(wwine$residual.sugar, 0.99),]
+wwine <- wwine[wwine$chlorides < quantile(wwine$chlorides, 0.99),]
+wwine <- wwine[wwine$free.sulfur.dioxide < quantile(wwine$free.sulfur.dioxide, 0.99),]
+wwine <- wwine[wwine$total.sulfur.dioxide < quantile(wwine$total.sulfur.dioxide, 0.99),]
+wwine <- wwine[wwine$sulphates < quantile(wwine$sulphates, 0.99),]
+```
 
 # Univariate Analysis
-
-> **Tip**: Now that you've completed your univariate explorations, it's time to
-reflect on and summarize what you've found. Use the questions below to help you
-gather your observations and add your own if you have other thoughts!
 
 ### What is the structure of your dataset?
 
@@ -76,20 +93,16 @@ of the data? If so, why did you do this?
 
 # Bivariate Plots Section
 
-> **Tip**: Based on what you saw in the univariate plots, what relationships
-between variables might be interesting to look at in this section? Don't limit
-yourself to relationships between a main output feature and one of the
-supporting variables. Try to look at relationships between supporting variables
-as well.
+```{r echo=FALSE, message=FALSE, warning=FALSE, summary_1}
+tmpdata <- wwine[ , !names(wwine) %in% c("X")]
+ggcorr(tmpdata, label = TRUE)
+```
 
 ```{r echo=FALSE, Bivariate_Plots}
 
 ```
 
 # Bivariate Analysis
-
-> **Tip**: As before, summarize what you found in your bivariate explorations
-here. Use the questions below to guide your discussion.
 
 ### Talk about some of the relationships you observed in this part of the \
 investigation. How did the feature(s) of interest vary with other features in \
@@ -102,13 +115,6 @@ the dataset?
 
 
 # Multivariate Plots Section
-
-> **Tip**: Now it's time to put everything together. Based on what you found in
-the bivariate plots section, create a few multivariate plots to investigate
-more complex interactions between variables. Make sure that the plots that you
-create here are justified by the plots you explored in the previous section. If
-you plan on creating any mathematical models, this is the section where you
-will do that.
 
 ```{r echo=FALSE, Multivariate_Plots}
 
@@ -128,14 +134,6 @@ strengths and limitations of your model.
 ------
 
 # Final Plots and Summary
-
-> **Tip**: You've done a lot of exploration and have built up an understanding
-of the structure of and relationships between the variables in your dataset.
-Here, you will select three plots from all of your previous exploration to
-present here as a summary of some of your most interesting findings. Make sure
-that you have refined your selected plots for good titling, axis labels (with
-units), and good aesthetic choices (e.g. color, transparency). After each plot,
-make sure you justify why you chose each plot by describing what it shows.
 
 ### Plot One
 ```{r echo=FALSE, Plot_One}
@@ -164,10 +162,3 @@ make sure you justify why you chose each plot by describing what it shows.
 
 # Reflection
 
-> **Tip**: Here's the final step! Reflect on the exploration you performed and
-the insights you found. What were some of the struggles that you went through?
-What went well? What was surprising? Make sure you include an insight into
-future work that could be done with the dataset.
-
-> **Tip**: Don't forget to remove this, and the other **Tip** sections before
-saving your final work and knitting the final report!
