@@ -1,5 +1,12 @@
-White Wine Quality Analysis by Arvind Raj
-========================================================
+---
+title: "White Wine Quality Analysis"
+author: "Arvind Raj"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
 setwd("D:/Studies/Git/White-wine-Quality")
