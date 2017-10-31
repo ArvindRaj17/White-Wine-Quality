@@ -22,7 +22,7 @@ library(GGally)
 wwine <- read.csv('wineQualityWhites.csv')
 ```
 
-This report explores the quality of 4898 different red wwines. This particular dataset consists of 4898 observations with 13 different variables.
+This report explores the quality of 4898 different white wines. This particular dataset consists of 4898 observations with 13 different variables.
 
 #Summary of Dataset
 
@@ -69,7 +69,7 @@ p11 = ggplot(aes(x = factor(quality)), data = wwine) +
 grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p12, p9, p10, p11, ncol = 3)
 ```
 
-The one thing we observed in almost all the above plots are the obscene outliers. For further exploration we would have to remove these outliers. We have cut off the top 1% of data to remove such outliers. The outliers must be cut off from the following variables (fixed acidity, volatile acidity, citric acid, residual sugar, chlorides, free sulfur dioxide, total sulphur dioxide and sulphates.)
+The one thing we observed in almost all the above plots are the obscene outliers. For further exploration we would have to remove these outliers. We have to cut off the top 1% of data to remove such outliers. The outliers must be cut off from the following variables (fixed acidity, volatile acidity, citric acid, residual sugar, chlorides, free sulfur dioxide, total sulphur dioxide and sulphates.)
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Remove_outliers}
 wwine <- wwine[wwine$fixed.acidity < quantile(wwine$fixed.acidity, 0.99),]
