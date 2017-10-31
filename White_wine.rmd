@@ -63,7 +63,7 @@ p9 = ggplot(aes(x = sulphates), data = wwine) +
   geom_histogram()
 p10 = ggplot(aes(x = alcohol), data = wwine) +
   geom_histogram()
-p11 = ggplot(aes(x = quality), data = wwine) +
+p11 = ggplot(aes(x = factor(quality)), data = wwine) +
   geom_bar()
 
 grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p12, p9, p10, p11, ncol = 3)
@@ -84,18 +84,6 @@ wwine <- wwine[wwine$sulphates < quantile(wwine$sulphates, 0.99),]
 
 # Univariate Analysis
 
-### What is the structure of your dataset?
-
-### What is/are the main feature(s) of interest in your dataset?
-
-### What other features in the dataset do you think will help support your \
-investigation into your feature(s) of interest?
-
-### Did you create any new variables from existing variables in the dataset?
-
-### Of the features you investigated, were there any unusual distributions? \
-Did you perform any operations on the data to tidy, adjust, or change the form \
-of the data? If so, why did you do this?
 
 
 # Bivariate Plots Section
@@ -105,20 +93,43 @@ tmpdata <- wwine[ , !names(wwine) %in% c("X")]
 ggcorr(tmpdata, label = TRUE)
 ```
 
-```{r echo=FALSE, Bivariate_Plots}
+As we can see from the above plot, it is evident that the quality of the wine corralates with the variables alcohol, density and chloride.
 
+Other than that we can see a strong correlation between 
+* Residual sugar and Density 
+* total sulfur dioxide and free sulphur dioxide
+* total sulfur dioxide and density
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots_1}
+ggplot(aes(x = density, y = residual.sugar), data = wwine) +
+  geom_point(alpha = 0.3, color = 'red', size = 1) +
+  geom_smooth(method = 'lm', color = 'green', se = FALSE, size=1)
 ```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots_2}
+ggplot(aes(x = factor(quality), y = alcohol), data = wwine) +
+  geom_boxplot(alpha = 0.5, color = 'blue') +
+  geom_jitter(alpha = 0.2, color = 'yellow') +
+  stat_summary(fun.y = median, geom = 'point', size = 4, shape = 8)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots_3}
+ggplot(aes(x = factor(quality), y = density), data = wwine) +
+  geom_boxplot(alpha = 0.5, color = 'blue') +
+  geom_jitter(alpha = 0.2, color = 'yellow') +
+  stat_summary(fun.y = median, geom = 'point', size = 4, shape = 8)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots_4}
+ggplot(aes(x = factor(quality), y = chlorides), data = wwine) +
+  geom_boxplot(alpha = 0.5, color = 'blue') +
+  geom_jitter(alpha = 0.2, color = 'yellow') +
+  stat_summary(fun.y = median, geom = 'point', size = 4, shape = 8)
+```
+
 
 # Bivariate Analysis
 
-### Talk about some of the relationships you observed in this part of the \
-investigation. How did the feature(s) of interest vary with other features in \
-the dataset?
-
-### Did you observe any interesting relationships between the other features \
-(not the main feature(s) of interest)?
-
-### What was the strongest relationship you found?
 
 
 # Multivariate Plots Section
@@ -129,14 +140,7 @@ the dataset?
 
 # Multivariate Analysis
 
-### Talk about some of the relationships you observed in this part of the \
-investigation. Were there features that strengthened each other in terms of \
-looking at your feature(s) of interest?
 
-### Were there any interesting or surprising interactions between features?
-
-### OPTIONAL: Did you create any models with your dataset? Discuss the \
-strengths and limitations of your model.
 
 ------
 
@@ -167,5 +171,5 @@ strengths and limitations of your model.
 
 ------
 
-# Reflection
+# Summary
 
